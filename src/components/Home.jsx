@@ -1,13 +1,38 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import { addToPastes, updateToPastes } from '../redux/pasteSlice';
 
 const Home = () => {
 
   const [title, setTitle] = useState('');
   const [value, setValue] = useState('');
-
   const [searchParams, setSearchParams] = useSearchParams('');
   const pasteId = searchParams.get("pasteId");
+  const dispatch = useDispatch();
+
+  const createPaste  = () => {
+    const paste = {
+      title: title,
+      content: value,
+      _id: pasteId || Date.now().toString(36),
+      createdAt: new Date().toISOString()
+    }
+
+    if(pasteId){
+      // update
+      dispatch(updateToPastes(paste));
+    }
+    else{
+      // create
+      dispatch(addToPastes(paste));
+    }
+
+    // after creation or updation clear the UI page
+    setTitle('');
+    setValue('');
+    setSearchParams({});
+  }
 
   return (
     <div>
@@ -20,7 +45,7 @@ const Home = () => {
       onChange={(e) => setTitle(e.target.value)}
       />
 
-      <button className='p-2 rounded-2xl mt-5' >
+      <button onClick={createPaste} className='p-2 rounded-2xl mt-5' >
         {
           pasteId ? "Update My Paste" : "Create My Paste"
         }
