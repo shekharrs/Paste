@@ -73,7 +73,7 @@ export const pasteSlice = createSlice({
     // ✅ Remove a specific paste
     removeFromPastes: (state, action) => {
       const pasteId = action.payload;
-      console.log(pasteId);
+      // console.log(pasteId);
 
       // ✅ Find the paste by its ID
       const index = state.pastes.findIndex((item) => item._id === pasteId);

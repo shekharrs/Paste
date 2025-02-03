@@ -39,11 +39,19 @@ const Paste = () => {
                 <div>{paste.content}</div>
 
                 <div className="flex flex-row gap-5 mt-8 place-content-evenly">
-                  <button>Edit</button>
+                  <button>
+                    {/* ✅ Handle Edit operation ( it will go to the particular pasteID Home Page ) */}
+                    <a href={`/?pasteId=${paste?._id}`}>
+                      Edit
+                    </a>
+                  </button>
+
                   <button>View</button>
+
                   <button onClick={() => handleDelete(paste?._id)}>
                     Delete
                   </button>
+
                   <button
                     // ✅ handle Copy operation 
                     onClick={() => {
@@ -53,6 +61,7 @@ const Paste = () => {
                   >
                     Copy
                   </button>
+
                   {/* Pending Operation - SHARE */}
                   <button>Share</button>
                 </div>
