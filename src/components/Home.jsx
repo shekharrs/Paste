@@ -48,7 +48,7 @@ const Home = () => {
   }
 
   return (
-    <div>
+    <div className='mt-5'>
       <div className='flex flex-row gap-7 place-content-between'>
       <input
       className='p-2 w-80 rounded-2xl mt-5 pl-5' 

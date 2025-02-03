@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromPastes } from "../redux/pasteSlice";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Paste = () => {
+  const navigate = useNavigate();
+
   const pastes = useSelector((state) => state.paste.pastes);
   // console.log(pastes);
 
@@ -22,7 +25,7 @@ const Paste = () => {
   return (
     <div>
       <input
-        className="mt-10 p-2 w-96 rounded-2xl pl-4"
+        className="mt-10 p-3 w-96 rounded-3xl pl-4"
         type="search"
         placeholder="Search your paste here..."
         value={searchTerm}
@@ -39,21 +42,23 @@ const Paste = () => {
                 <div>{paste.content}</div>
 
                 <div className="flex flex-row gap-5 mt-8 place-content-evenly">
-                  <button>
-                    {/* ✅ Handle Edit operation ( it will go to the particular pasteID Home Page ) */}
-                    <a href={`/?pasteId=${paste?._id}`}>
-                      Edit
-                    </a>
+                  {/* ✅ Handle Edit operation (it will go to the particular pasteID Home Page) */}
+                  <button onClick={() => navigate(`/?pasteId=${paste?._id}`)}>
+                    Edit
+                  </button>
+                   
+                   {/* ✅ Handle View operation (it will render View Page) */}
+                  <button onClick={() => navigate(`/pastes/${paste?._id}`)}>
+                    View
                   </button>
 
-                  <button>View</button>
-
+                   {/* ✅ Handle Delete operation */}
                   <button onClick={() => handleDelete(paste?._id)}>
                     Delete
                   </button>
 
+                  {/* ✅ Handle Copy operation  */}
                   <button
-                    // ✅ handle Copy operation 
                     onClick={() => {
                       navigator.clipboard.writeText(paste?.content);
                       toast.success("Copy to Clipboard");
