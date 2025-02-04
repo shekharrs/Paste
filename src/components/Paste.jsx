@@ -67,8 +67,24 @@ const Paste = () => {
                     Copy
                   </button>
 
-                  {/* Pending Operation - SHARE */}
-                  <button>Share</button>
+                  {/* ✅ Handle Share operation */}
+                  <button onClick={() => {
+                    if(navigator.share){
+                      navigator.share({
+                        title: paste.title,
+                        content: paste.content,
+                        url: window.location.origin + `/pastes/paste?._id`,
+                      })
+                      .then(() => toast.success("Shared Successfully!"))
+                      .catch((error) => console.error("Error sharing:", error))
+                    } 
+                    else{
+                      navigator.clipboard.writeText(window.location.origin + `/pastes/paste?._id`)
+                      toast.success("Linked copied to clipboard!")
+                    }
+                  }}>
+                    Share
+                  </button>
                 </div>
 
                 <div className="mt-2">{paste.createdAt}</div>
