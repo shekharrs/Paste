@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  font-family: monospace;
   line-height: 1.5;
   font-weight: 400;
 
@@ -17,6 +17,18 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/*****************/
+.light {
+  background-color: #f8f9fa; /* Light mode background */
+  color: #333333;
+}
+
+.dark {
+  background-color: #1a202c; /* Dark mode background */
+  color: #ffffff;
+}
+/*****************/
 
 a {
   font-weight: 500;

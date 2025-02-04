@@ -6,10 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Paste = () => {
   const navigate = useNavigate();
-
   const pastes = useSelector((state) => state.paste.pastes);
-  // console.log(pastes);
-
   const [searchTerm, setSearchTerm] = useState("");
   const dispatch = useDispatch();
 
@@ -17,87 +14,112 @@ const Paste = () => {
     paste.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ✅ handling delete operation on the delete button
   const handleDelete = (pasteId) => {
     dispatch(removeFromPastes(pasteId));
+    toast.success("Paste deleted successfully");
   };
 
   return (
-    <div>
+    <div className="p-6 sm:p-10 max-w-4xl mx-auto">
+      {/* Search Input */}
       <input
-        className="mt-10 p-3 w-96 rounded-3xl pl-4"
+        className="w-full sm:w-3/4 p-4 text-lg rounded-2xl bg-gray-800 text-white 
+                   border border-gray-600 focus:ring-4 focus:ring-purple-500 
+                   transition-all outline-none shadow-md"
         type="search"
-        placeholder="Search your paste here..."
+        placeholder="🔍 Search your paste here..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      <div className="flex flex-col gap-5 mt-10">
-        {filteredData.length > 0 &&
-          filteredData.map((paste) => {
-            return (
-              <div key={paste?._id} className="border">
-                <div>{paste.title}</div>
+      {/* Paste List */}
+      <div className="flex flex-col gap-6 mt-8">
+        {filteredData.length > 0 ? (
+          filteredData.map((paste) => (
+            <div
+              key={paste?._id}
+              className="p-6 bg-gray-900/80 border border-gray-700 rounded-2xl 
+                            shadow-lg text-white transition-all"
+            >
+              <h2 className="text-xl font-semibold">{paste.title}</h2>
+              <p className="mt-3 text-gray-300">{paste.content}</p>
 
-                <div>{paste.content}</div>
+              <div className="flex flex-wrap gap-3 mt-6">
+                {/* Edit Button */}
+                <button
+                  onClick={() => navigate(`/?pasteId=${paste?._id}`)}
+                  className="px-5 py-2 rounded-xl bg-blue-500 hover:bg-blue-600 
+                             transition-all text-white shadow-md"
+                >
+                  ✏️ Edit
+                </button>
 
-                <div className="flex flex-row gap-5 mt-8 place-content-evenly">
-                  {/* ✅ Handle Edit operation (it will go to the particular pasteID Home Page) */}
-                  <button onClick={() => navigate(`/?pasteId=${paste?._id}`)}>
-                    Edit
-                  </button>
+                {/* View Button */}
+                <button
+                  onClick={() => navigate(`/pastes/${paste?._id}`)}
+                  className="px-5 py-2 rounded-xl bg-green-500 hover:bg-green-600 
+                             transition-all text-white shadow-md"
+                >
+                  👀 View
+                </button>
 
-                  {/* ✅ Handle View operation (it will render View Page) */}
-                  <button onClick={() => navigate(`/pastes/${paste?._id}`)}>
-                    View
-                  </button>
+                {/* Delete Button */}
+                <button
+                  onClick={() => handleDelete(paste?._id)}
+                  className="px-5 py-2 rounded-xl bg-red-500 hover:bg-red-600 
+                             transition-all text-white shadow-md"
+                >
+                  🗑️ Delete
+                </button>
 
-                  {/* ✅ Handle Delete operation */}
-                  <button onClick={() => handleDelete(paste?._id)}>
-                    Delete
-                  </button>
+                {/* Copy Button */}
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(paste?.content);
+                    toast.success("Copied to Clipboard!");
+                  }}
+                  className="px-5 py-2 rounded-xl bg-yellow-500 hover:bg-yellow-600 
+                             transition-all text-white shadow-md"
+                >
+                  📋 Copy
+                </button>
 
-                  {/* ✅ Handle Copy operation  */}
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(paste?.content);
-                      toast.success("Copy to Clipboard");
-                    }}
-                  >
-                    Copy
-                  </button>
-
-                  {/* ✅ Handle Share operation */}
-                  <button
-                    onClick={() => {
-                      if (navigator.share) {
-                        navigator
-                          .share({
-                            title: paste.title,
-                            text: paste.content,
-                            url:
-                              window.location.origin + `/pastes/${paste?._id}`,
-                          })
-                          .then(() => toast.success("Shared successfully!"))
-                          .catch((error) =>
-                            console.error("Error sharing:", error)
-                          );
-                      } else {
-                        navigator.clipboard.writeText(
-                          window.location.origin + `/pastes/${paste?._id}`
+                {/* Share Button */}
+                <button
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator
+                        .share({
+                          title: paste.title,
+                          text: paste.content,
+                          url: `${window.location.origin}/pastes/${paste?._id}`,
+                        })
+                        .then(() => toast.success("Shared successfully!"))
+                        .catch((error) =>
+                          console.error("Error sharing:", error)
                         );
-                        toast.success("Link copied to clipboard!");
-                      }
-                    }}
-                  >
-                    Share
-                  </button>
-                </div>
-
-                <div className="mt-2">{paste.createdAt}</div>
+                    } else {
+                      navigator.clipboard.writeText(
+                        `${window.location.origin}/pastes/${paste?._id}`
+                      );
+                      toast.success("Link copied to clipboard!");
+                    }
+                  }}
+                  className="px-5 py-2 rounded-xl bg-purple-500 hover:bg-purple-600 
+                             transition-all text-white shadow-md"
+                >
+                  🔗 Share
+                </button>
               </div>
-            );
-          })}
+
+              <p className="mt-4 text-sm text-gray-400">{paste.createdAt}</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-400 mt-6">
+            No pastes found. Try adding some!
+          </p>
+        )}
       </div>
     </div>
   );
