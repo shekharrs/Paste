@@ -46,13 +46,13 @@ const Paste = () => {
                   <button onClick={() => navigate(`/?pasteId=${paste?._id}`)}>
                     Edit
                   </button>
-                   
-                   {/* ✅ Handle View operation (it will render View Page) */}
+
+                  {/* ✅ Handle View operation (it will render View Page) */}
                   <button onClick={() => navigate(`/pastes/${paste?._id}`)}>
                     View
                   </button>
 
-                   {/* ✅ Handle Delete operation */}
+                  {/* ✅ Handle Delete operation */}
                   <button onClick={() => handleDelete(paste?._id)}>
                     Delete
                   </button>
@@ -68,21 +68,28 @@ const Paste = () => {
                   </button>
 
                   {/* ✅ Handle Share operation */}
-                  <button onClick={() => {
-                    if(navigator.share){
-                      navigator.share({
-                        title: paste.title,
-                        content: paste.content,
-                        url: window.location.origin + `/pastes/paste?._id`,
-                      })
-                      .then(() => toast.success("Shared Successfully!"))
-                      .catch((error) => console.error("Error sharing:", error))
-                    } 
-                    else{
-                      navigator.clipboard.writeText(window.location.origin + `/pastes/paste?._id`)
-                      toast.success("Linked copied to clipboard!")
-                    }
-                  }}>
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator
+                          .share({
+                            title: paste.title,
+                            text: paste.content,
+                            url:
+                              window.location.origin + `/pastes/${paste?._id}`,
+                          })
+                          .then(() => toast.success("Shared successfully!"))
+                          .catch((error) =>
+                            console.error("Error sharing:", error)
+                          );
+                      } else {
+                        navigator.clipboard.writeText(
+                          window.location.origin + `/pastes/${paste?._id}`
+                        );
+                        toast.success("Link copied to clipboard!");
+                      }
+                    }}
+                  >
                     Share
                   </button>
                 </div>
