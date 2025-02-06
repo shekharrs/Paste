@@ -26,7 +26,7 @@ export const pasteSlice = createSlice({
         return; // Stop execution if duplicate is found
       }
 
-      // ✅ Create a new paste object with a unique ID and timestamp
+      // // ✅ Create a new paste object with a unique ID and timestamp
       const newPaste = {
         ...paste,
         _id: paste._id || Date.now().toString(36), // Generate unique ID if not provided

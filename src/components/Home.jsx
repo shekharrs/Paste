@@ -6,10 +6,11 @@ import { addToPastes, updateToPastes } from "../redux/pasteSlice";
 const Home = () => {
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true); // Button disabled state
+
   const [searchParams, setSearchParams] = useSearchParams("");
   const pasteId = searchParams.get("pasteId");
   const dispatch = useDispatch();
-
   const allPastes = useSelector((state) => state.paste.pastes);
 
   useEffect(() => {
@@ -22,7 +23,14 @@ const Home = () => {
     }
   }, [pasteId, allPastes]);
 
+  // Update button disabled state whenever title or value changes
+  useEffect(() => {
+    setIsDisabled(title.trim() === "" || value.trim() === "");
+  }, [title, value]);
+
   const createPaste = () => {
+    if (isDisabled) return; // Prevent action if disabled
+
     const paste = {
       title,
       content: value,
@@ -61,10 +69,13 @@ const Home = () => {
 
         <button
           onClick={createPaste}
-          className="px-8 py-4 rounded-2xl text-lg font-semibold text-white 
-                     bg-gradient-to-r from-purple-500 to-indigo-500 
-                     hover:from-purple-600 hover:to-indigo-600 focus:ring-4 focus:ring-purple-400 
-                     transition-all shadow-lg"
+          disabled={isDisabled} // Disable when inputs are empty
+          className={`px-8 py-4 rounded-2xl text-lg font-semibold text-white 
+                     transition-all shadow-lg ${
+                       isDisabled
+                         ? "bg-gray-800 cursor-not-allowed"
+                         : "bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 focus:ring-4 focus:ring-purple-400"
+                     }`}
         >
           {pasteId ? "Update Paste" : "Create Paste"}
         </button>

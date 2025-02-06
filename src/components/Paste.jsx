@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeFromPastes } from "../redux/pasteSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../utils/formatDate";
 
 const Paste = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Paste = () => {
 
   const handleDelete = (pasteId) => {
     dispatch(removeFromPastes(pasteId));
-    toast.success("Paste deleted successfully");
+    // toast.success("Paste deleted successfully");
   };
 
   return (
@@ -112,7 +113,7 @@ const Paste = () => {
                 </button>
               </div>
 
-              <p className="mt-4 text-sm text-gray-400">{paste.createdAt}</p>
+              <p className="mt-4 text-sm text-gray-400">{formatDate(paste?.createdAt)}</p>
             </div>
           ))
         ) : (
