@@ -41,7 +41,7 @@ const Navbar = () => {
         className="px-5 py-2 text-lg rounded-full font-medium 
                    bg-purple-500 text-white hover:bg-purple-600 transition-all shadow-md"
       >
-        {theme === "light" ? "Dark Mode 🌙" : "Light Mode ☀️"}
+        {theme === "light" ? "🌙" : " ☀️"}
       </button>
     </div>
   );
